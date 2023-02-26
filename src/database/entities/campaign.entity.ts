@@ -6,22 +6,22 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Session } from './session.entity';
+import { SessionEntity } from './session.entity';
 import { TimestampEntity } from './timastamp.entity';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
-@Entity()
-export class Campaign extends TimestampEntity {
+@Entity('campaign')
+export class CampaignEntity extends TimestampEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-  owner: User;
+  owner: UserEntity;
 
-  @OneToMany(() => Session, ({ campaign }) => campaign, { eager: true })
-  sessions: Session[];
+  @OneToMany(() => SessionEntity, ({ campaign }) => campaign, { eager: true })
+  sessions: SessionEntity[];
 }

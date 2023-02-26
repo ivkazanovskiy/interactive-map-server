@@ -11,7 +11,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { User } from '../../database/entities/user.entity';
+import { UserEntity } from '../../database/entities/user.entity';
 import { GetUser } from '../../decorators/get-user.decorator';
 import { PaginationDto } from '../../dto/pagination.dto';
 import { JwtGuard } from '../../guards/jwt-guard';
@@ -28,13 +28,16 @@ export class CampaignController {
   constructor(private readonly campaignService: CampaignService) {}
 
   @Post()
-  create(@GetUser() user: User, @Body() createCampaignDto: CreateCampaignDto) {
+  create(
+    @GetUser() user: UserEntity,
+    @Body() createCampaignDto: CreateCampaignDto,
+  ) {
     return this.campaignService.create(user, createCampaignDto);
   }
 
   @Post(':id/session')
   createSession(
-    @GetUser() user: User,
+    @GetUser() user: UserEntity,
     @Param('id', ParseIntPipe) id: number,
     @Body() createSessionDto: CreateSessionDto,
   ) {
@@ -42,18 +45,18 @@ export class CampaignController {
   }
 
   @Get()
-  findAll(@GetUser() user: User, @Query() paginationDto: PaginationDto) {
+  findAll(@GetUser() user: UserEntity, @Query() paginationDto: PaginationDto) {
     return this.campaignService.findAll(user, paginationDto);
   }
 
   @Get(':id')
-  findOne(@GetUser() user: User, @Param('id', ParseIntPipe) id: number) {
+  findOne(@GetUser() user: UserEntity, @Param('id', ParseIntPipe) id: number) {
     return this.campaignService.findOne(user, id);
   }
 
   @Patch(':id')
   update(
-    @GetUser() user: User,
+    @GetUser() user: UserEntity,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCampaignDto: UpdateCampaignDto,
   ) {
@@ -61,13 +64,13 @@ export class CampaignController {
   }
 
   @Delete(':id')
-  remove(@GetUser() user: User, @Param('id', ParseIntPipe) id: number) {
+  remove(@GetUser() user: UserEntity, @Param('id', ParseIntPipe) id: number) {
     return this.campaignService.remove(user, id);
   }
 
   @Delete(':id/session/:sessionId')
   removeSession(
-    @GetUser() user: User,
+    @GetUser() user: UserEntity,
     @Param('id', ParseIntPipe) id: number,
     @Param('sessionId', ParseIntPipe) sessionId: number,
   ) {

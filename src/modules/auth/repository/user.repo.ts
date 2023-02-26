@@ -1,17 +1,17 @@
 import { DataSource, Repository } from 'typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { User } from '../../../database/entities/user.entity';
+import { UserEntity } from '../../../database/entities/user.entity';
 import { compare, hash } from 'bcrypt';
 import { SignUpDto } from '../dto/sign-up.dto';
 import { TGoogleUserData } from '../types/google-user-data.type';
 
 @Injectable()
-export class UserRepository extends Repository<User> {
+export class UserRepository extends Repository<UserEntity> {
   constructor(dataSource: DataSource) {
-    super(User, dataSource.createEntityManager());
+    super(UserEntity, dataSource.createEntityManager());
   }
 
-  async signUp(userOptions: SignUpDto): Promise<User | null> {
+  async signUp(userOptions: SignUpDto): Promise<UserEntity | null> {
     const hashedPassword = await hash(userOptions.password, 10);
 
     const user = this.create({ ...userOptions, password: hashedPassword });
@@ -28,7 +28,7 @@ export class UserRepository extends Repository<User> {
   }: {
     email: string;
     password: string;
-  }): Promise<User | null> {
+  }): Promise<UserEntity | null> {
     try {
       const user = await this.findOne({ where: { email } });
 
@@ -44,7 +44,7 @@ export class UserRepository extends Repository<User> {
     providerId,
     username,
     email,
-  }: TGoogleUserData): Promise<User | null> {
+  }: TGoogleUserData): Promise<UserEntity | null> {
     let user = await this.findOne({
       where: {
         email: email,

@@ -4,22 +4,25 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
-import { Campaign } from './campaign.entity';
+import { CampaignEntity } from './campaign.entity';
 import { TimestampEntity } from './timastamp.entity';
 
-@Entity()
-export class Map extends TimestampEntity {
+@Entity('map')
+// FIXME: add correct constraint: one active map per campaign's session
+// @Unique('active_map', ['campaign', 'isActive'] as (keyof MapEntity)[])
+export class MapEntity extends TimestampEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @Column()
+  @Column({ name: 'is_active', default: () => 'FALSE' })
   isActive: boolean;
 
-  @ManyToOne(() => Campaign)
+  @ManyToOne(() => CampaignEntity)
   @JoinColumn({ name: 'campaign_id', referencedColumnName: 'id' })
-  campaign: Campaign;
+  campaign: CampaignEntity;
 }

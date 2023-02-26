@@ -3,19 +3,19 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from './repository/user.repo';
-import { User } from '../../database/entities/user.entity';
+import { UserEntity } from '../../database/entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { Config } from '../other/config/config.service';
-import { RefreshToken } from '../../database/entities/refresh-token.entity';
+import { RefreshTokenEntity } from '../../database/entities/refresh-token.entity';
 import { GoogleOauthStrategy } from './strategies/google-oauth.strategy';
 
 @Module({
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([User, RefreshToken]),
+    TypeOrmModule.forFeature([UserEntity, RefreshTokenEntity]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [Config],

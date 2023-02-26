@@ -5,17 +5,17 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
-@Entity()
-export class RefreshToken {
+@Entity('refresh_token')
+export class RefreshTokenEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   token: string;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => UserEntity)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-  user: User;
+  user: UserEntity;
 }

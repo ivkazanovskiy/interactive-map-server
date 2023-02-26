@@ -6,8 +6,8 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RefreshToken } from '../../database/entities/refresh-token.entity';
-import { User } from '../../database/entities/user.entity';
+import { RefreshTokenEntity } from '../../database/entities/refresh-token.entity';
+import { UserEntity } from '../../database/entities/user.entity';
 import { Config } from '../other/config/config.service';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -21,12 +21,15 @@ export class AuthService {
   constructor(
     private readonly config: Config,
     private readonly userRepo: UserRepository,
-    @InjectRepository(RefreshToken)
-    private readonly refreshTokenRepo: Repository<RefreshToken>,
+    @InjectRepository(RefreshTokenEntity)
+    private readonly refreshTokenRepo: Repository<RefreshTokenEntity>,
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<User | null> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<UserEntity | null> {
     return this.userRepo.login({ email, password });
   }
 
@@ -42,7 +45,7 @@ export class AuthService {
     return this.getTokens(user);
   }
 
-  private async getTokens(user: User): Promise<TokensDto> {
+  private async getTokens(user: UserEntity): Promise<TokensDto> {
     // TODO: set correct payload for both tokens
     const payload: TJWTPayload = { id: user.id };
 

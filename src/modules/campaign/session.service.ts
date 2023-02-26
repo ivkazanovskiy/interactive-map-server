@@ -1,21 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Campaign } from '../../database/entities/campaign.entity';
-import { Session } from '../../database/entities/session.entity';
+import { CampaignEntity } from '../../database/entities/campaign.entity';
+import { SessionEntity } from '../../database/entities/session.entity';
 import { CreateSessionDto } from './dto/create-session.dto';
 
 @Injectable()
 export class SessionService {
   constructor(
-    @InjectRepository(Session)
-    private readonly sessionRepo: Repository<Session>,
+    @InjectRepository(SessionEntity)
+    private readonly sessionRepo: Repository<SessionEntity>,
   ) {}
 
   async create(
-    companyEntity: Campaign,
+    companyEntity: CampaignEntity,
     createSessionDto: CreateSessionDto,
-  ): Promise<Session> {
+  ): Promise<SessionEntity> {
     const sessionEntity = this.sessionRepo.create({
       name: createSessionDto.name,
       campaign: companyEntity,
@@ -23,7 +23,10 @@ export class SessionService {
     return this.sessionRepo.save(sessionEntity);
   }
 
-  async remove(companyEntity: Campaign, sessionId: number): Promise<Session> {
+  async remove(
+    companyEntity: CampaignEntity,
+    sessionId: number,
+  ): Promise<SessionEntity> {
     const sessionEntity = companyEntity.sessions.find(
       ({ id }) => id === sessionId,
     );

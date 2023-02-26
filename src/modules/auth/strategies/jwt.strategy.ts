@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { User } from '../../../database/entities/user.entity';
+import { UserEntity } from '../../../database/entities/user.entity';
 import { Config } from '../../other/config/config.service';
 import { UserRepository } from '../repository/user.repo';
 import { TJWTPayload } from '../types/jwt-payload.type';
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   // special name used for 'AuthGuard()'
-  async validate(payload: TJWTPayload): Promise<User> {
+  async validate(payload: TJWTPayload): Promise<UserEntity> {
     const { id } = payload;
     const user = await this.userRepository.findOne({ where: { id } });
 

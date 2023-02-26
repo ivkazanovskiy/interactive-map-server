@@ -5,18 +5,18 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Campaign } from './campaign.entity';
+import { CampaignEntity } from './campaign.entity';
 import { TimestampEntity } from './timastamp.entity';
 
-@Entity()
-export class Session extends TimestampEntity {
+@Entity('session')
+export class SessionEntity extends TimestampEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   name: string;
 
-  @ManyToOne(() => Campaign)
+  @ManyToOne(() => CampaignEntity)
   @JoinColumn({ name: 'campaign_id', referencedColumnName: 'id' })
-  campaign: Campaign;
+  campaign: CampaignEntity;
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Campaign } from '../../database/entities/campaign.entity';
-import { Session } from '../../database/entities/session.entity';
-import { User } from '../../database/entities/user.entity';
+import { CampaignEntity } from '../../database/entities/campaign.entity';
+import { SessionEntity } from '../../database/entities/session.entity';
+import { UserEntity } from '../../database/entities/user.entity';
 import { PaginationDto } from '../../dto/pagination.dto';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { CreateSessionDto } from './dto/create-session.dto';
@@ -13,12 +13,15 @@ import { SessionService } from './session.service';
 @Injectable()
 export class CampaignService {
   constructor(
-    @InjectRepository(Campaign)
-    private readonly campaignRepo: Repository<Campaign>,
+    @InjectRepository(CampaignEntity)
+    private readonly campaignRepo: Repository<CampaignEntity>,
     private readonly sessionService: SessionService,
   ) {}
 
-  create(user: User, createCampaignDto: CreateCampaignDto): Promise<Campaign> {
+  create(
+    user: UserEntity,
+    createCampaignDto: CreateCampaignDto,
+  ): Promise<CampaignEntity> {
     const campaignEntity = this.campaignRepo.create({
       owner: user,
       name: createCampaignDto.name,
@@ -27,8 +30,11 @@ export class CampaignService {
     return this.campaignRepo.save(campaignEntity);
   }
 
-  findAll(owner: User, paginationDto: PaginationDto): Promise<Campaign[]> {
-    return this.campaignRepo.find({
+  findAll(
+    owner: UserEntity,
+    paginationDto: PaginationDto,
+  ): Promise<[CampaignEntity[], number]> {
+    return this.campaignRepo.findAndCount({
       // TODO: make sure it is correct approach
       where: { owner: { id: owner.id } },
       take: paginationDto.limit,
@@ -36,7 +42,7 @@ export class CampaignService {
     });
   }
 
-  findOne(owner: User, id: number): Promise<Campaign> {
+  findOne(owner: UserEntity, id: number): Promise<CampaignEntity> {
     return this.campaignRepo.findOneOrFail({
       where: {
         id,
@@ -46,35 +52,35 @@ export class CampaignService {
   }
 
   async update(
-    owner: User,
+    owner: UserEntity,
     id: number,
     updateCampaignDto: UpdateCampaignDto,
-  ): Promise<Campaign> {
+  ): Promise<CampaignEntity> {
     const campaignEntity = await this.findOne(owner, id);
     if (updateCampaignDto.name) campaignEntity.name = updateCampaignDto.name;
     return this.campaignRepo.save(campaignEntity);
   }
 
-  async remove(owner: User, id: number): Promise<Campaign> {
+  async remove(owner: UserEntity, id: number): Promise<CampaignEntity> {
     const campaignEntity = await this.findOne(owner, id);
     return this.campaignRepo.softRemove(campaignEntity);
   }
 
   async createSession(
-    user: User,
+    user: UserEntity,
     campaignId: number,
     createSessionDto: CreateSessionDto,
-  ): Promise<Session> {
+  ): Promise<SessionEntity> {
     const campaignEntity = await this.findOne(user, campaignId);
     // TODO: remove campaign entity from the response
     return this.sessionService.create(campaignEntity, createSessionDto);
   }
 
   async removeSession(
-    user: User,
+    user: UserEntity,
     campaignId: number,
     sessionId: number,
-  ): Promise<Session> {
+  ): Promise<SessionEntity> {
     const campaignEntity = await this.findOne(user, campaignId);
     return this.sessionService.remove(campaignEntity, sessionId);
   }
