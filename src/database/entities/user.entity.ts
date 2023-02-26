@@ -1,15 +1,10 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { RefreshToken } from './refresh-token.entity';
+import { TimestampEntity } from './timastamp.entity';
 
 // FIXME: add constraint: OR password IS NULL OR google_id IS NULL
 @Entity()
-export class User {
+export class User extends TimestampEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,19 +16,6 @@ export class User {
 
   @Column({ nullable: true, type: 'varchar' })
   password: string | null;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @CreateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
-
-  @CreateDateColumn({
-    name: 'deleted_at',
-    default: () => 'NULL',
-    nullable: true,
-  })
-  deletedAt: Date;
 
   @OneToMany(() => RefreshToken, ({ user }) => user)
   refreshTokens: RefreshToken[];
