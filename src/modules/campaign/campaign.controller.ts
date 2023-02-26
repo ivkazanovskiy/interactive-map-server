@@ -17,18 +17,28 @@ import { PaginationDto } from '../../dto/pagination.dto';
 import { JwtGuard } from '../../guards/jwt-guard';
 import { CampaignService } from './campaign.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
+import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 
 @ApiTags('Campaign')
-@Controller('campaign')
 @ApiBearerAuth()
 @UseGuards(JwtGuard)
+@Controller('campaign')
 export class CampaignController {
   constructor(private readonly campaignService: CampaignService) {}
 
   @Post()
   create(@GetUser() user: User, @Body() createCampaignDto: CreateCampaignDto) {
     return this.campaignService.create(user, createCampaignDto);
+  }
+
+  @Post(':id/session')
+  createSession(
+    @GetUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createSessionDto: CreateSessionDto,
+  ) {
+    return this.campaignService.createSession(user, id, createSessionDto);
   }
 
   @Get()
@@ -53,5 +63,14 @@ export class CampaignController {
   @Delete(':id')
   remove(@GetUser() user: User, @Param('id', ParseIntPipe) id: number) {
     return this.campaignService.remove(user, id);
+  }
+
+  @Delete(':id/session/:sessionId')
+  removeSession(
+    @GetUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Param('sessionId', ParseIntPipe) sessionId: number,
+  ) {
+    return this.campaignService.removeSession(user, id, sessionId);
   }
 }

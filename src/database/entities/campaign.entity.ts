@@ -3,8 +3,10 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Session } from './session.entity';
 import { TimestampEntity } from './timastamp.entity';
 import { User } from './user.entity';
 
@@ -19,4 +21,7 @@ export class Campaign extends TimestampEntity {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   owner: User;
+
+  @OneToMany(() => Session, ({ campaign }) => campaign, { eager: true })
+  sessions: Session[];
 }
