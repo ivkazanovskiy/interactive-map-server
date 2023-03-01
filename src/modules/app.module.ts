@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { CampaignModule } from './campaign/campaign.module';
 import { MapModule } from './map/map.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { MapModule } from './map/map.module';
     AuthModule,
     CampaignModule,
     MapModule,
+    SocketModule,
   ],
   controllers: [AppController],
 })
