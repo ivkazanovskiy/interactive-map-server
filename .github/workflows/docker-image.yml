@@ -65,4 +65,14 @@ jobs:
           script: |
             docker pull $IMAGE
             docker rm $CONTAINER
-            docker run --name $CONTAINER --network dnd-net $IMAGE
+            docker run --name $CONTAINER --network \
+              -e DB_HOST=$DB_HOST \
+              -e DB_PORT=$DB_PORT \
+              -e DB_USERNAME=$DB_USERNAME \
+              -e DB_PASSWORD=$DB_PASSWORD \
+              -e DB_DATABASE=$DB_DATABASE \
+              -e JWT_SECRET=$JWT_SECRET \
+              -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
+              -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
+              -e GOOGLE_CALLBACK_URL=$GOOGLE_CALLBACK_URL \
+              dnd-net $IMAGE
