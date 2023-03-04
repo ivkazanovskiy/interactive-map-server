@@ -18,7 +18,7 @@ async function bootstrap() {
   const logger = new Logger('bootstrap');
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalFilters(
