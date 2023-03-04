@@ -38,7 +38,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: 
       name: production
-      url: https://github.com
     steps:
     - uses: actions/checkout@v2
     - name: Deploy to server
@@ -52,10 +51,7 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         password: ${{ secrets.SSH_PASSWORD }}
+        envs: DOCKERHUB_USERNAME,DOCKERHUB_TOKEN,IMAGE,CONTAINER
         script: |
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
           docker pull $IMAGE
-          docker rm $CONTAINER
-          docker create --name $CONTAINER --network dnd-net -e DB_HOST=dnd-postrges -p 80:80 $IMAGE
-          docker run $CONTAINER yarn start:prod
-          docker logout
