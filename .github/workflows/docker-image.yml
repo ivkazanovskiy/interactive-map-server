@@ -64,6 +64,7 @@ jobs:
           envs: IMAGE,CONTAINER,DB_HOST,DB_PORT,DB_USERNAME,DB_PASSWORD,DB_DATABASE,JWT_SECRET,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_CALLBACK_URL
           script: |
             docker pull $IMAGE
+            docker stop $CONTAINER
             docker rm $CONTAINER
             docker run --name $CONTAINER --network dnd-net \
               -e DB_HOST=$DB_HOST \
@@ -75,4 +76,4 @@ jobs:
               -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
               -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
               -e GOOGLE_CALLBACK_URL=$GOOGLE_CALLBACK_URL \
-              -p 80:3000 $IMAGE
+              -p 80:3000 -d $IMAGE
