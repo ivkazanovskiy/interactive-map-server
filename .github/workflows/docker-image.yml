@@ -76,4 +76,4 @@ jobs:
               -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
               -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
               -e GOOGLE_CALLBACK_URL=$GOOGLE_CALLBACK_URL \
-              -p 80:127.0.0.1:3000 -d $IMAGE
+              -p localhost:80:127.0.0.1:3000 -d $IMAGE
