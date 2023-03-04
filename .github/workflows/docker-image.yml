@@ -75,4 +75,4 @@ jobs:
               -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
               -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
               -e GOOGLE_CALLBACK_URL=$GOOGLE_CALLBACK_URL \
-              $IMAGE
+              -p 80:3000 $IMAGE
