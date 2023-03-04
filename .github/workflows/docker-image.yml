@@ -55,3 +55,6 @@ jobs:
         script: |
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
           docker pull $IMAGE
+          docker rm $CONTAINER
+          docker create $CONTAINER $IMAGE
+          docker logout
