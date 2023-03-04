@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 
 export const configValidationSchema = Joi.object({
   //app
-  HOST: Joi.string().default('127.0.0.1'),
+  HOST: Joi.string().default('localhost'),
   PORT: Joi.number().default(3000),
 
   // postgresConnection
