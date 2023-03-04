@@ -39,14 +39,14 @@ jobs:
     environment: 
       name: production
       url: https://github.com
-    env:
-      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
-      CONTAINER: ${{ github.event.repository.name }}
     steps:
     - uses: actions/checkout@v2
     - name: Deploy to server
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+        CONTAINER: ${{ github.event.repository.name }}
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
