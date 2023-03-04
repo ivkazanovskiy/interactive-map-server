@@ -63,6 +63,7 @@ jobs:
           script: |
             docker stop /$CONTAINER
             docker rm /$CONTAINER
+            docker rmi /$image
             docker run --name $CONTAINER --network dnd-net \
               -e DB_HOST=$DB_HOST \
               -e DB_PORT=$DB_PORT \
