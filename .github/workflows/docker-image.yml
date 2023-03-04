@@ -53,4 +53,4 @@ jobs:
         script: |
           docker pull $IMAGE
           docker rm $CONTAINER
-          docker create $CONTAINER $IMAGE
+          docker run --name $CONTAINER --network dnd-net $IMAGE
