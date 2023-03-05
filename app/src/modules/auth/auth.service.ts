@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -43,6 +44,19 @@ export class AuthService {
     const user = await this.userRepo.login(loginDto);
     if (!user) throw new UnauthorizedException();
     return this.getTokens(user);
+  }
+
+  async refresh(refreshToken: string): Promise<TokensDto> {
+    const token = await this.refreshTokenRepo.findOne({
+      where: { token: refreshToken },
+    });
+
+    if (!token) throw new ForbiddenException();
+
+    const tokens = await this.getTokens(token.user);
+
+    await this.refreshTokenRepo.delete({ id: token.id });
+    return tokens;
   }
 
   private async getTokens(user: UserEntity): Promise<TokensDto> {

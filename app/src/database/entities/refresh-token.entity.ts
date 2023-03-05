@@ -15,7 +15,7 @@ export class RefreshTokenEntity {
   @Column()
   token: string;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, { eager: true })
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: UserEntity;
 }
