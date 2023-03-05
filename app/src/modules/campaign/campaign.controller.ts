@@ -21,7 +21,7 @@ import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 
 @ApiTags('Campaign')
-@ApiBearerAuth()
+@ApiBearerAuth('access_token')
 @UseGuards(JwtGuard)
 @Controller('campaign')
 export class CampaignController {

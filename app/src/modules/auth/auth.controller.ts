@@ -1,6 +1,15 @@
-import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  Headers,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UserEntity } from '../../database/entities/user.entity';
 import { GetUser } from '../../decorators/get-user.decorator';
@@ -25,6 +34,28 @@ export class AuthController {
   @Post('login')
   login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  // TODO: make sure it is okay to pass refresh token in header
+  @Post('refresh')
+  @ApiBearerAuth('refresh_token')
+  refreshToken(@Headers() headers: Request['headers']) {
+    const { authorization } = headers;
+    if (!authorization) throw new UnauthorizedException();
+    const [tokenName, refreshToken] = authorization.split(' ');
+    if (tokenName !== 'Bearer' || !refreshToken)
+      throw new UnauthorizedException();
+
+    return this.authService.refresh(refreshToken);
+  }
+
+  // TODO: remove this endpoint when frontend is ready to use user entity
+  @Get()
+  @ApiOperation({ summary: 'temporary access token check' })
+  @ApiBearerAuth('access_token')
+  @UseGuards(JwtGuard)
+  check(@GetUser() user: UserEntity): void {
+    return;
   }
 
   @Get('google')

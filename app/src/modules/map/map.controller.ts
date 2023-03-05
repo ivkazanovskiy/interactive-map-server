@@ -21,7 +21,7 @@ import { PaginationDto } from '../../dto/pagination.dto';
 import { GetMapsDto } from './dto/get-maps.dto';
 
 @ApiTags('Map')
-@ApiBearerAuth()
+@ApiBearerAuth('access_token')
 @UseGuards(JwtGuard)
 @Controller('map')
 export class MapController {
