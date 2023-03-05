@@ -10,7 +10,7 @@ import { swaggerConfig } from './swager.config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: { origin: ['http://localhost:5173'] },
+    cors: { origin: ['http://localhost:5173', 'http://ivkazanovskiy.ru/'] },
   });
 
   const {
