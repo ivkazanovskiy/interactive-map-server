@@ -16,19 +16,23 @@ async function bootstrap() {
   });
 
   const {
-    app: { port, host },
+    app: { port, host, globalPrefix },
   } = app.get(Config);
 
   const logger = new Logger('bootstrap');
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('docs', app, document);
+  const document = SwaggerModule.createDocument(
+    app,
+    swaggerConfig(globalPrefix),
+  );
+  SwaggerModule.setup('/docs', app, document);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalFilters(
     new BaseTypeORMFilter(), // 1) all TypeORM errors handler
     new TypeORMNotFoundFilter(), // 2) findOneOrFail handler (only after common handler)
   );
+  app.setGlobalPrefix(globalPrefix);
 
   await app.listen(port, host);
   logger.log(`Server is listening on ${host}:${port}`);

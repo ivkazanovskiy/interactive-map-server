@@ -11,6 +11,7 @@ export class Config {
     return {
       host: this.configService.getOrThrow<string>('HOST'),
       port: this.configService.getOrThrow<number>('PORT'),
+      globalPrefix: this.configService.getOrThrow<string>('GLOBAL_PREFIX'),
     };
   }
 
