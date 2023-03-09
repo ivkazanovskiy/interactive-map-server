@@ -15,7 +15,7 @@ export const configValidationSchema = Joi.object({
   //jwt
   JWT_SECRET: Joi.string().required(),
   /** expressed in seconds or a string describing a time span [zeit/ms](https://github.com/zeit/ms.js).  Eg: 60, "2 days", "10h", "7d" */
-  JWT_AT_EXPIRES: Joi.string().default('2min'),
+  JWT_AT_EXPIRES: Joi.string().default('1day'), // TODO: set 2 mins after correct env deployment
   /** expressed in seconds or a string describing a time span [zeit/ms](https://github.com/zeit/ms.js).  Eg: 60, "2 days", "10h", "7d" */
   JWT_RT_EXPIRES: Joi.string().default('30days'),
 
