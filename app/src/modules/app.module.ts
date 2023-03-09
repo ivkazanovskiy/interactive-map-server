@@ -7,6 +7,7 @@ import { MapModule } from './map/map.module';
 import { SocketModule } from './socket/socket.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { join } from 'path';
     CampaignModule,
     MapModule,
     SocketModule,
+    ProfileModule,
   ],
 })
 export class AppModule {}
