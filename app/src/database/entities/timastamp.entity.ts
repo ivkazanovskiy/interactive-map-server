@@ -9,7 +9,6 @@ export class TimestampEntity {
 
   @DeleteDateColumn({
     name: 'deleted_at',
-    default: () => 'NULL',
     nullable: true,
   })
   deletedAt: Date;

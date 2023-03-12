@@ -9,6 +9,8 @@ export class Config {
 
   get app() {
     return {
+      isProd:
+        this.configService.getOrThrow<string>('NODE_ENV') === 'production',
       host: this.configService.getOrThrow<string>('HOST'),
       port: this.configService.getOrThrow<number>('PORT'),
       globalPrefix: this.configService.getOrThrow<string>('GLOBAL_PREFIX'),

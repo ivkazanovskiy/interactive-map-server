@@ -25,4 +25,10 @@ export class MapEntity extends TimestampEntity {
   @ManyToOne(() => CampaignEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'campaign_id', referencedColumnName: 'id' })
   campaign: CampaignEntity;
+
+  @Column()
+  width: number;
+
+  @Column()
+  height: number;
 }

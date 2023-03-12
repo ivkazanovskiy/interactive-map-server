@@ -12,9 +12,9 @@ import * as path from 'path';
         config: Config,
       ): Promise<PostgresConnectionOptions> => ({
         type: 'postgres',
-        synchronize: true,
+        synchronize: false,
         ...config.postgresConnection,
-        logging: true,
+        logging: !!config.app.isProd, // if NODE_ENV is prod, we hide query logs
         entities: [path.join(__dirname, '../../database/entities/*.entity.*s')],
       }),
     }),
