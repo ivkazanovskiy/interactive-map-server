@@ -71,3 +71,21 @@ jobs:
               -e GOOGLE_CALLBACK_URL=$GOOGLE_CALLBACK_URL \
               -e HOST=0.0.0.0 \
               -d $IMAGE
+  update_nginx:
+    needs: deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy to server
+        env:
+          CONTAINER: ${{ github.event.repository.name }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            docker cp $CONTAINER:/usr/src/app/nginx.conf ~/nginx
+            docker restart dnd-map-nginx
