@@ -22,7 +22,7 @@ export class MapEntity extends TimestampEntity {
   @Column({ name: 'is_active', default: () => 'FALSE' })
   isActive: boolean;
 
-  @ManyToOne(() => CampaignEntity)
+  @ManyToOne(() => CampaignEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'campaign_id', referencedColumnName: 'id' })
   campaign: CampaignEntity;
 }

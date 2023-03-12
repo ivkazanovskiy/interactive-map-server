@@ -18,7 +18,7 @@ export class CampaignEntity extends TimestampEntity {
   @Column()
   name: string;
 
-  @ManyToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   owner: UserEntity;
 

@@ -50,6 +50,7 @@ export class UserRepository extends Repository<UserEntity> {
         email: email,
       },
     });
+
     if (user && user.googleId !== providerId) return null;
 
     if (user) return user;
@@ -60,6 +61,6 @@ export class UserRepository extends Repository<UserEntity> {
       googleId: providerId,
     });
 
-    return await this.save(user);
+    return this.save(user);
   }
 }
