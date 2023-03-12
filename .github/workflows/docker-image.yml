@@ -86,6 +86,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
+          envs: CONTAINER
           script: |
             docker cp $CONTAINER:/usr/src/app/nginx.conf ~/nginx
             docker restart dnd-map-nginx
