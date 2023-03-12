@@ -46,6 +46,14 @@ export class AuthService {
     return this.getTokens(user);
   }
 
+  async signOut(refreshToken: string): Promise<void> {
+    const token = await this.refreshTokenRepo.findOneOrFail({
+      where: { token: refreshToken },
+    });
+
+    await this.refreshTokenRepo.delete({ id: token.id });
+  }
+
   async refresh(refreshToken: string): Promise<TokensDto> {
     const token = await this.refreshTokenRepo.findOne({
       where: { token: refreshToken },

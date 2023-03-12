@@ -10,7 +10,7 @@ import {
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from '../../database/entities/user.entity';
 import { GetUser } from '../../decorators/get-user.decorator';
 import { PaginationDto } from '../../dto/pagination.dto';
@@ -45,6 +45,7 @@ export class CampaignController {
   }
 
   @Get()
+  @ApiOkResponse()
   findAll(@GetUser() user: UserEntity, @Query() paginationDto: PaginationDto) {
     return this.campaignService.findAll(user, paginationDto);
   }

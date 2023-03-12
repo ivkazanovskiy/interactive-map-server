@@ -17,6 +17,7 @@ import { JwtGuard } from '../../guards/jwt-guard';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/sign-up.dto';
+import { TokensDto } from './dto/tokens.dto';
 import { TGoogleUserData } from './types/google-user-data.type';
 
 @Controller('auth')
@@ -35,9 +36,22 @@ export class AuthController {
   }
 
   // TODO: make sure it is okay to pass refresh token in header
-  @Post('refresh')
+  @Get('sign-out')
   @ApiBearerAuth('refresh_token')
-  refreshToken(@Headers() headers: Request['headers']) {
+  signOut(@Headers() headers: Request['headers']): Promise<void> {
+    const { authorization } = headers;
+    if (!authorization) throw new UnauthorizedException();
+    const [tokenName, refreshToken] = authorization.split(' ');
+    if (tokenName !== 'Bearer' || !refreshToken)
+      throw new UnauthorizedException();
+
+    return this.authService.signOut(refreshToken);
+  }
+
+  // TODO: make sure it is okay to pass refresh token in header
+  @Get('refresh')
+  @ApiBearerAuth('refresh_token')
+  refreshToken(@Headers() headers: Request['headers']): Promise<TokensDto> {
     const { authorization } = headers;
     if (!authorization) throw new UnauthorizedException();
     const [tokenName, refreshToken] = authorization.split(' ');

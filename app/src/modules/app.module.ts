@@ -11,9 +11,9 @@ import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'client'),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', '..', 'client'),
+    // }),
     ConfigModule,
     PostgresConnectionModule,
     AuthModule,
