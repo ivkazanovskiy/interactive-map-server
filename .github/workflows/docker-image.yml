@@ -89,4 +89,4 @@ jobs:
           envs: CONTAINER
           script: |
             docker cp $CONTAINER:/usr/src/app/nginx.conf ~/nginx
-            docker restart dnd-map-nginx
+            docker restart nginx
