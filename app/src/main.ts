@@ -8,6 +8,7 @@ import { TypeORMNotFoundFilter } from './filters/typeorm-filters/not-found.filte
 import { AppModule } from './modules/app.module';
 import { Config } from './modules/other/config/config.service';
 import { swaggerConfig } from './swager.config';
+import * as morgan from 'morgan';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -27,6 +28,7 @@ async function bootstrap() {
     swaggerConfig(globalPrefix),
   );
   SwaggerModule.setup('/docs', app, document);
+  app.use(morgan('tiny'));
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalFilters(

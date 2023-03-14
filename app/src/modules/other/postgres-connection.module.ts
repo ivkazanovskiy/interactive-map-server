@@ -14,7 +14,7 @@ import * as path from 'path';
         type: 'postgres',
         synchronize: false,
         ...config.postgresConnection,
-        logging: !!config.app.isProd, // if NODE_ENV is prod, we hide query logs
+        logging: false,
         entities: [path.join(__dirname, '../../database/entities/*.entity.*s')],
       }),
     }),
