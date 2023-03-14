@@ -17,7 +17,6 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '../../guards/jwt-guard';
 import { GetUser } from '../../decorators/get-user.decorator';
 import { UserEntity } from '../../database/entities/user.entity';
-import { PaginationDto } from '../../dto/pagination.dto';
 import { GetMapsDto } from './dto/get-maps.dto';
 
 @ApiTags('Map')

@@ -2,6 +2,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { SwaggerModule } from '@nestjs/swagger';
+import { HttpExceptionFilter } from './filters/http.filter';
 import { BaseTypeORMFilter } from './filters/typeorm-filters/base.filter';
 import { TypeORMNotFoundFilter } from './filters/typeorm-filters/not-found.filter';
 import { AppModule } from './modules/app.module';
@@ -29,6 +30,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalFilters(
+    new HttpExceptionFilter(),
     new BaseTypeORMFilter(), // 1) all TypeORM errors handler
     new TypeORMNotFoundFilter(), // 2) findOneOrFail handler (only after common handler)
   );

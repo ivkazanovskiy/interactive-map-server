@@ -26,9 +26,9 @@ export class MapEntity extends TimestampEntity {
   @JoinColumn({ name: 'campaign_id', referencedColumnName: 'id' })
   campaign: CampaignEntity;
 
-  @Column()
+  @Column({ default: 20 })
   width: number;
 
-  @Column()
+  @Column({ default: 20 })
   height: number;
 }

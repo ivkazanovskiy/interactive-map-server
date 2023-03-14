@@ -3,11 +3,11 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
-  InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { TypeORMError } from 'typeorm';
+import { ErrorDto } from '../../dto/error.dto';
 
 @Catch(TypeORMError)
 export class BaseTypeORMFilter implements ExceptionFilter {
@@ -19,8 +19,6 @@ export class BaseTypeORMFilter implements ExceptionFilter {
 
     this.logger.error({ err: exception });
 
-    const nestError = new InternalServerErrorException();
-
-    response.status(nestError.getStatus()).json(nestError.getResponse());
+    response.status(500).json(new ErrorDto());
   }
 }

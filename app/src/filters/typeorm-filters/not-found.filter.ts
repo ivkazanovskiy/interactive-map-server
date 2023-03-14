@@ -1,12 +1,7 @@
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
 import { Response } from 'express';
 import { EntityNotFoundError } from 'typeorm';
+import { ErrorDto } from '../../dto/error.dto';
 
 @Catch(EntityNotFoundError)
 export class TypeORMNotFoundFilter implements ExceptionFilter {
@@ -16,8 +11,6 @@ export class TypeORMNotFoundFilter implements ExceptionFilter {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
-    const nestError = new NotFoundException();
-
-    response.status(nestError.getStatus()).json(nestError.getResponse());
+    response.status(404).json(new ErrorDto());
   }
 }
