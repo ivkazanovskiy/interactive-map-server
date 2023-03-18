@@ -1,4 +1,0 @@
-Dockerfile
-.dockerignore
-app/node_modules
-app/dist
