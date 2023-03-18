@@ -15,7 +15,7 @@ jobs:
       - name: Copy secrets to server
         uses: appleboy/scp-action@master
         with:
-          local: .env
+          local: Dockerfile
           remote: ~/test/.env
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
