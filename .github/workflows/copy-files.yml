@@ -101,6 +101,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           envs: IMAGE,COMPOSE_PATH,DB_PASSWORD,DB_DATABASE,JWT_SECRET,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_CALLBACK_URL,NODE_ENV
-          script: |
-            cd $COMPOSE_PATH
-            docker compose up -d server
+          script: docker compose -f $COMPOSE_PATH/compose.yml up -d server
