@@ -24,7 +24,7 @@ jobs:
         with:
           source: docker/certbot/compose.yml
           target: ~/compose/certbot
-          strip_components: 1
+          strip_components: 2
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
@@ -41,7 +41,7 @@ jobs:
         with:
           source: nginx/https/nginx.conf
           target: ~/nginx/https
-          strip_components: 1
+          # strip_components: 1
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
