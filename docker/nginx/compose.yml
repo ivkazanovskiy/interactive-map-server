@@ -2,7 +2,7 @@ version: "3.9" # optional since v1.27.0
 name: nginx
 
 services:
-  nginx_http:
+  nginx_https:
     image: nginx:latest
     volumes:
       - ~/client:/usr/share/nginx/html:ro
