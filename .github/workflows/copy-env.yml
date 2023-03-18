@@ -15,8 +15,8 @@ jobs:
       - name: Copy secrets to server
         uses: appleboy/scp-action@master
         with:
-          source: "tests/a.txt,tests/b.txt"
-          target: "test"
+          source: "nginx.conf"
+          target: "~/test"
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
