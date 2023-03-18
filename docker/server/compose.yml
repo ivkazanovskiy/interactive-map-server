@@ -11,6 +11,8 @@ services:
     image: $IMAGE
     container_name: server
     hostname: server
+    ports:
+      - "127.0.0.1:3000:3000"
     environment:
       DB_HOST: postgres
       DB_PASSWORD: $DB_PASSWORD
@@ -26,8 +28,3 @@ services:
       - postgres
     links:
       - postgres
-
-networks:
-  default:
-    external:
-      name: dnd-net
