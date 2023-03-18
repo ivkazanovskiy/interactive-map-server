@@ -1,10 +1,10 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
-COPY package.json .
-COPY yarn.lock .
+COPY ./app/package.json .
+COPY ./app/yarn.lock .
 RUN yarn
 
-COPY . .
+COPY ./app .
 RUN yarn build
 
 
