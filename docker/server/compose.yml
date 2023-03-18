@@ -9,6 +9,7 @@ services:
   server:
     platform: linux/x86_64
     image: $IMAGE
+    container_name: server
     hostname: server
     environment:
       DB_HOST: postgres

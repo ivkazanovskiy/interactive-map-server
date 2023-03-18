@@ -13,6 +13,8 @@ services:
       - "444:443"
     networks:
       - interactive-map_default
+    links:
+      - server
 
 networks:
   interactive-map_default:
