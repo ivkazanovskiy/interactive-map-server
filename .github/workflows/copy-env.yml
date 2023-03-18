@@ -1,0 +1,22 @@
+name: Copy secrets to remote server
+
+on:
+  push:
+    branches: ["deploy"]
+
+jobs:
+  copy-to-server:
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Copy secrets to server
+        uses: appleboy/scp-action@master
+        with:
+          local: .env
+          remote: ~/test/.env
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
