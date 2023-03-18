@@ -1,5 +1,4 @@
 # This is a basic workflow that is manually triggered
-
 name: Manual workflow
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
@@ -28,3 +27,33 @@ jobs:
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
+  copy-nginx_http-to-server:
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Copy compose to server
+        uses: appleboy/scp-action@master
+        with:
+          source: "nginx/http/nginx.conf"
+          target: ${{ vars.NGINX_HTTP_PATH }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+  copy-nginx_https-to-server:
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Copy compose to server
+        uses: appleboy/scp-action@master
+        with:
+          source: nginx/https/nginx.conf
+          target: ${{ vars.NGINX_HTTPS_PATH }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
