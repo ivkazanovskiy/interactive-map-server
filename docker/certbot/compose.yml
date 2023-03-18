@@ -9,12 +9,19 @@ volumes:
       type: none
       o: bind
       device: ~/certificates
+  nginx_http_config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ~/nginx/http/nginx.conf
 
 services:
   nginx_http:
-    build: ../nginx/http
+    build: nginx:latest
     volumes:
       - nginx_http_static:/usr/share/nginx/html:ro
+      - nginx_http_config:/etc/nginx/nginx.conf:ro
     ports:
       - "80:80"
   certbot:
