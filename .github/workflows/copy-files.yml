@@ -6,7 +6,7 @@ on:
       - "deploy"
 
 jobs:
-  copy-to-server:
+  copy-compose-to-server:
     environment:
       name: production
     runs-on: ubuntu-latest
@@ -18,6 +18,36 @@ jobs:
         with:
           source: "compose.yml"
           target: ${{ secrets.COMPOSE_PATH }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+  copy-nginx_http-to-server:
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Copy compose to server
+        uses: appleboy/scp-action@master
+        with:
+          source: "nginx/http/nginx.conf"
+          target: ${{ secrets.NGINX_HTTP_PATH }}
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+  copy-nginx_https-to-server:
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Copy compose to server
+        uses: appleboy/scp-action@master
+        with:
+          source: "nginx/https/nginx.conf"
+          target: ${{ secrets.NGINX_HTTPS_PATH }}
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
