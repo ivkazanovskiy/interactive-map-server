@@ -11,11 +11,10 @@ services:
       - ~/nginx/https/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "444:443"
-    networks:
-      - interactive-map_default
     links:
       - server
 
 networks:
-  interactive-map_default:
-    external: true
+  default:
+    external:
+      name: interactive-map_default
