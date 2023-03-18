@@ -40,8 +40,6 @@ services:
     links:
       - postgres
   nginx_https:
-    depends_on:
-      - server
     build: ../nginx/https
     environment:
       SERVER_HOST: server
