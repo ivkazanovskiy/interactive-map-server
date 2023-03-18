@@ -1,0 +1,69 @@
+# This is a basic workflow that is manually triggered
+name: Update and restart ssl nginx
+
+on:
+  workflow_dispatch:
+    # inputs:
+    #   choice:
+    #     type: choice
+    #     description: 'Restart nginx:'
+    #     options:
+    #       - http
+    #       - https
+
+jobs:
+  nginx-compose-to-server:
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Copy compose to server
+        uses: appleboy/scp-action@master
+        with:
+          source: docker/nginx/compose.yml
+          target: ~/compose/nginx
+          strip_components: 2
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+
+  copy-nginx-config-to-server:
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Copy compose to server
+        uses: appleboy/scp-action@master
+        with:
+          source: nginx/https/nginx.conf
+          target: ~/nginx/https
+          strip_components: 2
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+
+  update-certificates:
+    needs:
+      - copy-nginx-config-to-server
+      - certbot-compose-to-server
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run certbot
+        # env:
+        #   DOMAIN: ${{ secrets.DOMAIN }}
+        #   DOMAIN_EMAIL: ${{ secrets.DOMAIN_EMAIL }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          # password: ${{ secrets.SSH_PASSWORD }}
+          envs: DOMAIN,DOMAIN_EMAIL
+          script: |
+            docker compose -f ~/compose/nginx/compose.yml up -d
