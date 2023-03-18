@@ -46,7 +46,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
 
-  update-certificates:
+  restart-nginx:
     needs:
       - copy-nginx-config-to-server
       - nginx-compose-to-server
@@ -63,7 +63,7 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          # password: ${{ secrets.SSH_PASSWORD }}
-          envs: DOMAIN,DOMAIN_EMAIL
+          password: ${{ secrets.SSH_PASSWORD }}
+          # envs: DOMAIN,DOMAIN_EMAIL
           script: |
             docker compose -f ~/compose/nginx/compose.yml up -d
