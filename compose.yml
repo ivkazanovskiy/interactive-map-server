@@ -1,21 +1,6 @@
 version: "3.9" # optional since v1.27.0
 name: interactive-map
 services:
-  nginx_http:
-    build: ../nginx/http
-    volumes:
-      - nginx_http_static:/usr/share/nginx/html:ro
-    ports:
-      - "80:80"
-  certbot:
-    depends_on:
-      - nginx_http
-    image: certbot/certbot
-    volumes:
-      - nginx_http_static:/var/www/certbot/:rw
-      - nginx_https_certificates:/etc/letsencrypt/:rw
-    command: certonly --webroot --webroot-path /var/www/certbot/ -d $DOMAIN --email $DOMAIN_EMAIL --agree-tos --no-eff-email --dry-run
-
   postgres:
     image: postgres:latest
     environment:
@@ -24,6 +9,7 @@ services:
   server:
     platform: linux/x86_64
     image: $IMAGE
+    hostname: server
     environment:
       DB_HOST: postgres
       DB_PASSWORD: $DB_PASSWORD
@@ -39,16 +25,3 @@ services:
       - postgres
     links:
       - postgres
-  nginx_https:
-    build: ../nginx/https
-    environment:
-      SERVER_HOST: server
-    ports:
-      - "444:443"
-    links:
-      - server
-
-volumes:
-  nginx_http_static:
-  nginx_https_static:
-  nginx_https_certificates:
