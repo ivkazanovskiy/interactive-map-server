@@ -17,7 +17,7 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           local: "compose.yml"
-          remote: "${{ secrets.COMPOSE_PATH }}"
+          remote: "~/compose"
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
