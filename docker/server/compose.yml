@@ -26,5 +26,3 @@ services:
       GOOGLE_CALLBACK_URL: $GOOGLE_CALLBACK_URL
     depends_on:
       - postgres
-    links:
-      - postgres
