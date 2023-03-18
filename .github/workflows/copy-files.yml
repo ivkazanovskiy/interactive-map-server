@@ -110,7 +110,7 @@ jobs:
   #         script: |
   #           docker compose -f ~/compose/compose.yml up -d nginx_http
   job4:
-    needs: copy-nginx_http-to-server
+    # needs: copy-nginx_http-to-server
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     steps:
