@@ -1,7 +1,7 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
-COPY ./package.json .
-COPY ./yarn.lock .
+COPY package.json .
+COPY yarn.lock .
 RUN yarn
 
 COPY . .
