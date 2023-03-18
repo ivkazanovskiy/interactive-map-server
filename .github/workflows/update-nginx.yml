@@ -1,5 +1,5 @@
 # This is a basic workflow that is manually triggered
-name: Manual workflow
+name: Update and restart ssl nginx
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
     #       - https
 
 jobs:
-  certbot-compose-to-server:
+  nginx-compose-to-server:
     environment:
       name: production
     runs-on: ubuntu-latest
@@ -22,8 +22,8 @@ jobs:
       - name: Copy compose to server
         uses: appleboy/scp-action@master
         with:
-          source: docker/certbot/compose.yml
-          target: ~/compose/certbot
+          source: docker/nginx/compose.yml
+          target: ~/compose/nginx
           strip_components: 2
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -39,13 +39,13 @@ jobs:
       - name: Copy compose to server
         uses: appleboy/scp-action@master
         with:
-          source: nginx/http/nginx.conf
-          target: ~/nginx/http
+          source: nginx/https/nginx.conf
+          target: ~/nginx/https
           strip_components: 2
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-  
+
   update-certificates:
     needs:
       - copy-nginx-config-to-server
@@ -56,35 +56,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run certbot
-        env:
-          DOMAIN: ${{ secrets.DOMAIN }}
-          DOMAIN_EMAIL: ${{ secrets.DOMAIN_EMAIL }}
+        # env:
+        #   DOMAIN: ${{ secrets.DOMAIN }}
+        #   DOMAIN_EMAIL: ${{ secrets.DOMAIN_EMAIL }}
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          # password: ${{ secrets.SSH_PASSWORD }}
           envs: DOMAIN,DOMAIN_EMAIL
           script: |
-            docker compose -f ~/compose/certbot/compose.yml up -d
-
-  # restart-nginx_https:
-  #   needs:
-  #     - copy-nginx_https-to-server
-  #     - copy-compose-to-server
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: production
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Run nginx_https job
-  #       env:
-  #         DOMAIN: ${{ secrets.DOMAIN }}
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.SSH_HOST }}
-  #         username: ${{ secrets.SSH_USERNAME }}
-  #         password: ${{ secrets.SSH_PASSWORD }}
-  #         envs: DOMAIN
-  #         script: |
-  #           docker compose -f ~/compose/compose.yml up -d nginx_https
+            docker compose -f ~/compose/nginx/compose.yml up -d
