@@ -26,3 +26,8 @@ services:
       GOOGLE_CALLBACK_URL: $GOOGLE_CALLBACK_URL
     depends_on:
       - postgres
+
+networks:
+  default:
+    name: dnd-net
+    external: true
