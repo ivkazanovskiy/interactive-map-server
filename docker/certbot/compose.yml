@@ -1,0 +1,30 @@
+version: "3.9" # optional since v1.27.0
+name: certbot
+
+volumes:
+  nginx_http_static:
+  nginx_https_certificates:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ~/certificates
+
+services:
+  nginx_http:
+    build: ../nginx/http
+    volumes:
+      - nginx_http_static:/usr/share/nginx/html:ro
+    ports:
+      - "80:80"
+  certbot:
+    depends_on:
+      - nginx_http
+    image: certbot/certbot
+    volumes:
+      - nginx_http_static:/var/www/certbot/:rw
+      - nginx_https_certificates:/etc/letsencrypt/:rw
+    command: certonly --webroot --webroot-path /var/www/certbot/ -d $DOMAIN --email $DOMAIN_EMAIL --agree-tos --no-eff-email --dry-run
+
+
+
