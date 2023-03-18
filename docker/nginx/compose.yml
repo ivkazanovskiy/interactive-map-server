@@ -17,4 +17,4 @@ services:
 networks:
   default:
     external:
-      name: interactive-map_default
+      name: dnd-net

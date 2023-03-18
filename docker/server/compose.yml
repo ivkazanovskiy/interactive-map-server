@@ -26,3 +26,8 @@ services:
       - postgres
     links:
       - postgres
+
+networks:
+  default:
+    external:
+      name: dnd-net
