@@ -3,12 +3,13 @@ name: Manual workflow
 
 on:
   workflow_dispatch:
-    choice:
-      type: choice
-      description: Restart nginx
-      options:
-        - http
-        - https
+    inputs:
+      choice:
+        type: choice
+        description: 'Restart nginx:'
+        options:
+          - http
+          - https
 
 jobs:
   copy-compose-to-server:
@@ -82,3 +83,24 @@ jobs:
           envs: DOMAIN,DOMAIN_EMAIL
           script: |
             docker compose -f ~/compose/compose.yml up -d certbot
+
+  restart-nginx_https:
+    needs:
+      - copy-nginx_https-to-server
+      - copy-compose-to-server
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run nginx_https job
+        env:
+          DOMAIN: ${{ secrets.DOMAIN }}
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          envs: DOMAIN
+          script: |
+            docker compose -f ~/compose/compose.yml up -d nginx_https
