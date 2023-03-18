@@ -11,10 +11,8 @@ services:
       - ~/nginx/https/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "444:443"
-    links:
-      - server
 
 networks:
   default:
-    external:
-      name: dnd-net
+    name: interactive-map_default
+    external: true
