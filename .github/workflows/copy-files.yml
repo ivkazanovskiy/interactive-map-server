@@ -102,3 +102,32 @@ jobs:
           envs: IMAGE,DB_PASSWORD,DB_DATABASE,JWT_SECRET,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,GOOGLE_CALLBACK_URL,NODE_ENV
           script: |
             docker compose -f ~/compose/compose.yml up -d server
+  # update-certificates:
+  #   needs:
+  #     - copy-nginx_http-to-server
+  #     - copy-compose-to-server
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'workflow_dispatch'
+  #   environment:
+  #     name: production
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Run nginx_http job
+  #       env:
+  #         DOMAIN: ${{ secrets.DOMAIN }}
+  #         DOMAIN_EMAIL: ${{ secrets.DOMAIN_EMAIL }}
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.SSH_HOST }}
+  #         username: ${{ secrets.SSH_USERNAME }}
+  #         password: ${{ secrets.SSH_PASSWORD }}
+  #         envs: DOMAIN,DOMAIN_EMAIL
+  #         script: |
+  #           docker compose -f ~/compose/compose.yml up -d nginx_http
+  job4:
+    needs: copy-nginx_http-to-server
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Step 1
+        run: echo "Job 4"
