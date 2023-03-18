@@ -1,6 +1,9 @@
 name: Copy files to server
 
-on: workflow_dispatch
+on: 
+  push:
+    branches:
+      - "deploy"
 
 jobs:
   copy-to-server:
