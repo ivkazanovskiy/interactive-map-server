@@ -1,5 +1,5 @@
 # This is a basic workflow that is manually triggered
-name: Update ssl certificates
+name: Run certbot
 
 on:
   workflow_dispatch:

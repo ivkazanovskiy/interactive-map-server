@@ -49,7 +49,7 @@ jobs:
   update-certificates:
     needs:
       - copy-nginx-config-to-server
-      - certbot-compose-to-server
+      - nginx-compose-to-server
     runs-on: ubuntu-latest
     environment:
       name: production
