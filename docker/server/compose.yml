@@ -6,6 +6,8 @@ services:
     environment:
       POSTGRES_PASSWORD: $DB_PASSWORD
       POSTGRES_DB: $DB_DATABASE
+    networks:
+      - interactive-map
   server:
     platform: linux/x86_64
     image: $IMAGE
@@ -26,3 +28,8 @@ services:
       GOOGLE_CALLBACK_URL: $GOOGLE_CALLBACK_URL
     depends_on:
       - postgres
+    networks:
+      - interactive-map
+
+networks:
+  interactive-map:
