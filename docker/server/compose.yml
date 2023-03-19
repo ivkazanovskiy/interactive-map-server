@@ -11,8 +11,6 @@ services:
     image: $IMAGE
     container_name: server
     hostname: server
-    ports:
-      - "3000:3000"
     environment:
       DB_HOST: postgres
       DB_PASSWORD: $DB_PASSWORD
