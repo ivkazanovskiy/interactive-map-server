@@ -4,17 +4,13 @@ name: nginx
 services:
   nginx_https:
     image: nginx:latest
-    # environment:
-    #   SERVER_HOST: server
     volumes:
       - ~/client:/usr/share/nginx/html:ro
       - ~/nginx/https/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "444:443"
-    networks:
-      - interactive-map
+      - "443:443"
 
 networks:
-  interactive-map:
-    external:
-      name: interactive-map_default
+  default:
+    name: interactive-map_default
+    external: true
