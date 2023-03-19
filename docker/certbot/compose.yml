@@ -19,7 +19,7 @@ services:
     volumes:
       - nginx_http_static:/var/www/certbot/:rw
       - ~/certificates:/etc/letsencrypt/:rw
-    command: certonly --webroot --webroot-path /var/www/certbot/ -d $DOMAIN --email $DOMAIN_EMAIL --agree-tos --no-eff-email --dry-run
+    command: certonly --webroot --webroot-path /var/www/certbot/ -d $DOMAIN --email $DOMAIN_EMAIL --agree-tos --no-eff-email
 
 
 
