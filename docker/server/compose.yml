@@ -1,0 +1,28 @@
+version: "3.9" # optional since v1.27.0
+name: interactive-map
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: $DB_DATABASE
+  server:
+    platform: linux/x86_64
+    image: $IMAGE
+    container_name: server
+    hostname: server
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: postgres
+      DB_PASSWORD: $DB_PASSWORD
+      DB_DATABASE: $DB_DATABASE
+      DB_PORT: 5432
+      HOST: 0.0.0.0
+      DB_USERNAME: postgres
+      JWT_SECRET: $JWT_SECRET
+      GOOGLE_CLIENT_ID: $GOOGLE_CLIENT_ID
+      GOOGLE_CLIENT_SECRET: $GOOGLE_CLIENT_SECRET
+      GOOGLE_CALLBACK_URL: $GOOGLE_CALLBACK_URL
+    depends_on:
+      - postgres
