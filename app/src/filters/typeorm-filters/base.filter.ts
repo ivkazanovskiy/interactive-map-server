@@ -8,6 +8,7 @@ import {
 import { Response } from 'express';
 import { TypeORMError } from 'typeorm';
 import { ErrorDto } from '../../dto/error.dto';
+import { ErrorMessage } from '../../types/error-messages.enum';
 
 @Catch(TypeORMError)
 export class BaseTypeORMFilter implements ExceptionFilter {
@@ -19,6 +20,8 @@ export class BaseTypeORMFilter implements ExceptionFilter {
 
     this.logger.error({ err: exception });
 
-    response.status(500).json(new ErrorDto());
+    response
+      .status(500)
+      .json(new ErrorDto({ code: ErrorMessage.INTERNAL_SERVER_ERROR }));
   }
 }

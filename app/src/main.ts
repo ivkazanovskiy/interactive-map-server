@@ -9,6 +9,7 @@ import { AppModule } from './modules/app.module';
 import { Config } from './modules/other/config/config.service';
 import { swaggerConfig } from './swager.config';
 import * as morgan from 'morgan';
+import { ValidationFilter } from './filters/validaton.filter';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -33,6 +34,7 @@ async function bootstrap(): Promise<void> {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalFilters(
     new HttpExceptionFilter(),
+    new ValidationFilter(),
     new BaseTypeORMFilter(), // 1) all TypeORM errors handler
     new TypeORMNotFoundFilter(), // 2) findOneOrFail handler (only after common handler)
   );

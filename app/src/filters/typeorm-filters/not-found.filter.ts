@@ -11,6 +11,6 @@ export class TypeORMNotFoundFilter implements ExceptionFilter {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
-    response.status(404).json(new ErrorDto());
+    response.status(404).json(new ErrorDto({}));
   }
 }

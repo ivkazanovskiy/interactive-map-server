@@ -1,8 +1,19 @@
-import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Query,
+  Param,
+  ParseIntPipe,
+  Delete,
+} from '@nestjs/common';
 import { CreateSessionDto } from './dto/create-session.dto';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -14,6 +25,7 @@ import { JwtGuard } from '../../guards/jwt-guard';
 import { PaginatedResponseDto } from '../../dto/paginated-response.dto';
 import { GetCampaignsDto } from './dto/get-campaigns.dto';
 import { ApiPaginatedResponse } from '../../decorators/paginated-response.decorator';
+import { InvitedUserDto } from './dto/invite-user.dto';
 
 @ApiTags('Sessions')
 @ApiBearerAuth('access_token')
@@ -55,10 +67,48 @@ export class SessionController {
     });
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.sessionService.findOne(+id);
-  // }
+  @Get(':id')
+  @ApiOperation({ summary: 'Returns session by id' })
+  @ApiOkResponse({ type: SessionDto })
+  async findOne(
+    @GetUser() user: UserEntity,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<SessionDto> {
+    const sessionEntity = await this.sessionService.findOne(user, id);
+    return new SessionDto(sessionEntity);
+  }
+
+  @Post(':id/user')
+  @ApiOperation({ summary: 'Invite user to the session' })
+  @ApiOkResponse({ type: SessionDto })
+  async inviteUser(
+    @GetUser() user: UserEntity,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() inviteUserDto: InvitedUserDto,
+  ): Promise<SessionDto> {
+    const sessionEntity = await this.sessionService.inviteUser({
+      owner: user,
+      sessionId: id,
+      invitedId: inviteUserDto.id,
+    });
+    return new SessionDto(sessionEntity);
+  }
+
+  @Delete(':id/user')
+  @ApiOperation({ summary: 'Delete ' })
+  @ApiOkResponse({ type: SessionDto })
+  async kickUser(
+    @GetUser() user: UserEntity,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() inviteUserDto: InvitedUserDto,
+  ): Promise<SessionDto> {
+    const sessionEntity = await this.sessionService.kickUser({
+      owner: user,
+      sessionId: id,
+      invitedId: inviteUserDto.id,
+    });
+    return new SessionDto(sessionEntity);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateSessionDto: UpdateSessionDto) {
