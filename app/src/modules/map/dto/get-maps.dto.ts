@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsInt, IsPositive } from 'class-validator';
-import { PaginationDto } from '../../../dto/pagination.dto';
+import { PaginationRequestDto } from '../../../dto/pagination-request.dto';
 
-export class GetMapsDto extends PaginationDto {
+export class GetMapsDto extends PaginationRequestDto {
   @ApiProperty()
   @Type(() => Number)
   @IsInt()

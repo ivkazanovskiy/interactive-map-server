@@ -10,7 +10,7 @@ import { Config } from './modules/other/config/config.service';
 import { swaggerConfig } from './swager.config';
 import * as morgan from 'morgan';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors({

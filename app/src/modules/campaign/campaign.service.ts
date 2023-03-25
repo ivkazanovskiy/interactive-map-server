@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { CampaignEntity } from '../../database/entities/campaign.entity';
 import { SessionEntity } from '../../database/entities/session.entity';
 import { UserEntity } from '../../database/entities/user.entity';
-import { PaginationDto } from '../../dto/pagination.dto';
+import { PaginationRequestDto } from '../../dto/pagination-request.dto';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
@@ -32,7 +32,7 @@ export class CampaignService {
 
   findAll(
     owner: UserEntity,
-    paginationDto: PaginationDto,
+    paginationDto: PaginationRequestDto,
   ): Promise<[CampaignEntity[], number]> {
     return this.campaignRepo.findAndCount({
       // TODO: make sure it is correct approach

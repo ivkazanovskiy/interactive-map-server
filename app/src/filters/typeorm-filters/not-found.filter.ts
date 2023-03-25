@@ -7,7 +7,7 @@ import { ErrorDto } from '../../dto/error.dto';
 export class TypeORMNotFoundFilter implements ExceptionFilter {
   private readonly logger = new Logger(TypeORMNotFoundFilter.name);
 
-  catch(exception: TypeORMNotFoundFilter, host: ArgumentsHost) {
+  catch(exception: TypeORMNotFoundFilter, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 

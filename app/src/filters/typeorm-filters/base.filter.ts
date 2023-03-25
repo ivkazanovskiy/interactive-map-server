@@ -13,7 +13,7 @@ import { ErrorDto } from '../../dto/error.dto';
 export class BaseTypeORMFilter implements ExceptionFilter {
   private readonly logger = new Logger(BaseTypeORMFilter.name);
 
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exception: HttpException, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 

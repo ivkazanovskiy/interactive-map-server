@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';

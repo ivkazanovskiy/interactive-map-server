@@ -1,5 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../../../database/entities/user.entity';
 import { compare, hash } from 'bcrypt';
 import { SignUpDto } from '../dto/sign-up.dto';

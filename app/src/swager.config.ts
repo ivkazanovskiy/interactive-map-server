@@ -1,6 +1,8 @@
-import { DocumentBuilder } from '@nestjs/swagger';
+import { DocumentBuilder, OpenAPIObject } from '@nestjs/swagger';
 
-export const swaggerConfig = (globalPrefix = '') =>
+export const swaggerConfig = (
+  globalPrefix = '',
+): Omit<OpenAPIObject, 'paths'> =>
   new DocumentBuilder()
     .addBearerAuth(undefined, 'access_token')
     .addBearerAuth(undefined, 'refresh_token')
