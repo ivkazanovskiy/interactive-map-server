@@ -3,6 +3,9 @@ import { MapEntity } from '../../../database/entities/map.entity';
 
 export class MapDto {
   @ApiProperty()
+  id: number;
+
+  @ApiProperty()
   name: string;
 
   @ApiProperty()
@@ -12,6 +15,7 @@ export class MapDto {
   height: number;
 
   constructor(mapEntity: MapEntity) {
+    this.id = mapEntity.id;
     this.name = mapEntity.name;
     this.width = mapEntity.width;
     this.height = mapEntity.height;

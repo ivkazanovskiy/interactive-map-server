@@ -26,7 +26,6 @@ import { JwtGuard } from '../../guards/jwt-guard';
 import { CampaignService } from './campaign.service';
 import { CampaignDto } from './dto/campaign.dto';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
-import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 
 @ApiTags('Campaign')
@@ -105,24 +104,5 @@ export class CampaignController {
   ): Promise<CampaignDto> {
     const campaignEntity = await this.campaignService.remove(user, id);
     return new CampaignDto(campaignEntity);
-  }
-
-  @Post(':id/session')
-  createSession(
-    @GetUser() user: UserEntity,
-    @Param('id', ParseIntPipe) id: number,
-    @Body() createSessionDto: CreateSessionDto,
-  ) {
-    return this.campaignService.createSession(user, id, createSessionDto);
-  }
-
-  @Delete(':id/session/:sessionId')
-  @ApiOperation({ summary: 'Removes session by id' })
-  removeSession(
-    @GetUser() user: UserEntity,
-    @Param('id', ParseIntPipe) id: number,
-    @Param('sessionId', ParseIntPipe) sessionId: number,
-  ) {
-    return this.campaignService.removeSession(user, id, sessionId);
   }
 }

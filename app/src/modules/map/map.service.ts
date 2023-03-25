@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CampaignEntity } from '../../database/entities/campaign.entity';
 import { MapEntity } from '../../database/entities/map.entity';
 import { UserEntity } from '../../database/entities/user.entity';
+import { CampaignService } from '../campaign/campaign.service';
 import { CreateMapDto } from './dto/create-map.dto';
 import { GetMapsDto } from './dto/get-maps.dto';
 import { UpdateMapDto } from './dto/update-map.dto';
@@ -13,25 +14,14 @@ export class MapService {
   constructor(
     @InjectRepository(MapEntity)
     private readonly mapRepo: Repository<MapEntity>,
-    @InjectRepository(CampaignEntity)
-    private readonly campaignRepo: Repository<CampaignEntity>,
+    private readonly campaignService: CampaignService,
   ) {}
-
-  // TODO: replace with campaignService method
-  private async getCampaign(
-    user: UserEntity,
-    campaignId: number,
-  ): Promise<CampaignEntity> {
-    return this.campaignRepo.findOneOrFail({
-      where: { owner: { id: user.id }, id: campaignId },
-    });
-  }
 
   async create(
     user: UserEntity,
     createMapDto: CreateMapDto,
   ): Promise<MapEntity> {
-    const campaignEntity = await this.getCampaign(
+    const campaignEntity = await this.campaignService.findOne(
       user,
       createMapDto.campaignId,
     );
