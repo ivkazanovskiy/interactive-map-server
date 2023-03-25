@@ -61,6 +61,7 @@ export class SessionService {
     const sessionEntity = this.sessionRepo.create({
       name: createSessionDto.name,
       campaign: campaignEntity,
+      userToSession: [], // default value to avoid error "undefined.map" in SessionDto
     });
 
     return this.sessionRepo.save(sessionEntity);

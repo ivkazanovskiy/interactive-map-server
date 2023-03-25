@@ -2,8 +2,8 @@ name: Deploy server
 
 on:
   push:
-    branches:
-      - "deploy"
+    tags:
+      - 'v\d+\.\d+\.\d+'
 
 jobs:
   copy-compose-to-server:
@@ -43,7 +43,7 @@ jobs:
           context: .
           file: ./app/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
   deploy-server:
     needs:
       - build
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Deploy to server
         env:
-          IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
+          IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.ref_name }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_DATABASE: ${{ secrets.DB_DATABASE }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
