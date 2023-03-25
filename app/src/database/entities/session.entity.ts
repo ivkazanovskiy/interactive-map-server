@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CampaignEntity } from './campaign.entity';
-import { TimestampEntity } from './timastamp.entity';
+import { TimestampEntity } from './timestamp.entity';
 import { UserToSessionEntity } from './user-to-session.entity';
 
 @Entity('session')

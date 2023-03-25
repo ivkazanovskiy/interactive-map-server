@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CampaignEntity } from './campaign.entity';
-import { TimestampEntity } from './timastamp.entity';
+import { TimestampEntity } from './timestamp.entity';
 
 @Entity('map')
 // FIXME: add correct constraint: one active map per campaign's session

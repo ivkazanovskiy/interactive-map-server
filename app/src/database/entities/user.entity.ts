@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { RefreshTokenEntity } from './refresh-token.entity';
-import { TimestampEntity } from './timastamp.entity';
+import { TimestampEntity } from './timestamp.entity';
 
 // FIXME: add constraint: OR password IS NULL OR google_id IS NULL
 @Entity('user')
