@@ -9,6 +9,7 @@ import { SocketService } from './socket.service';
 import { Socket } from 'socket.io';
 import { EEvents } from './types/event.enum';
 import { TokenDto } from './dto/token.dto';
+import { OnModuleInit } from '@nestjs/common';
 
 @WebSocketGateway()
 export class SocketGateway {
@@ -18,4 +19,14 @@ export class SocketGateway {
   ping(@MessageBody() data: TokenDto, @ConnectedSocket() client: Socket): void {
     client.emit(EEvents.moveToken, data);
   }
+
+  private handleConnection(
+    @ConnectedSocket() client: Socket,
+    ...args: any[]
+  ): void {
+    console.log('client', client);
+    console.log('args', args);
+  }
+
+  private handleDisconnect(): void {}
 }
