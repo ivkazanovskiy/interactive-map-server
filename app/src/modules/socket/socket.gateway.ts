@@ -7,13 +7,15 @@ import {
 import { SocketService } from './socket.service';
 
 import { Socket } from 'socket.io';
+import { EEvents } from './types/event.enum';
+import { TokenDto } from './dto/token.dto';
 
 @WebSocketGateway()
 export class SocketGateway {
   constructor(private readonly socketService: SocketService) {}
 
-  @SubscribeMessage('ping')
-  ping(@MessageBody() data: string, @ConnectedSocket() client: Socket): void {
-    client.emit('pong', 'received: ' + data);
+  @SubscribeMessage(EEvents.moveToken)
+  ping(@MessageBody() data: TokenDto, @ConnectedSocket() client: Socket): void {
+    client.emit(EEvents.moveToken, data);
   }
 }
