@@ -3,10 +3,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CampaignEntity } from './campaign.entity';
 import { TimestampEntity } from './timastamp.entity';
+import { UserToSessionEntity } from './user-to-session.entity';
 
 @Entity('session')
 export class SessionEntity extends TimestampEntity {
@@ -19,4 +21,9 @@ export class SessionEntity extends TimestampEntity {
   @ManyToOne(() => CampaignEntity)
   @JoinColumn({ name: 'campaign_id', referencedColumnName: 'id' })
   campaign: CampaignEntity;
+
+  @OneToMany(() => UserToSessionEntity, ({ session }) => session, {
+    eager: true,
+  })
+  public userToSession: UserToSessionEntity[];
 }

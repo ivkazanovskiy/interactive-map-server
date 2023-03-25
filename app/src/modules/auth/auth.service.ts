@@ -34,7 +34,7 @@ export class AuthService {
     return this.userRepo.login({ email, password });
   }
 
-  async signUp(signUpDto: SignUpDto) {
+  async signUp(signUpDto: SignUpDto): Promise<TokensDto> {
     const user = await this.userRepo.signUp(signUpDto);
     if (!user) throw new BadRequestException();
     return this.getTokens(user);

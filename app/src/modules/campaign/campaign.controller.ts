@@ -10,14 +10,22 @@ import {
   Query,
   ParseIntPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserEntity } from '../../database/entities/user.entity';
 import { GetUser } from '../../decorators/get-user.decorator';
-import { PaginationDto } from '../../dto/pagination.dto';
+import { ApiPaginatedResponse } from '../../decorators/paginated-response.decorator';
+import { PaginatedResponseDto } from '../../dto/paginated-response.dto';
+import { PaginationRequestDto } from '../../dto/pagination-request.dto';
 import { JwtGuard } from '../../guards/jwt-guard';
 import { CampaignService } from './campaign.service';
+import { CampaignDto } from './dto/campaign.dto';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
-import { CreateSessionDto } from './dto/create-session.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 
 @ApiTags('Campaign')
@@ -28,53 +36,73 @@ export class CampaignController {
   constructor(private readonly campaignService: CampaignService) {}
 
   @Post()
-  create(
+  @ApiOperation({ summary: 'Creates new campaign' })
+  @ApiCreatedResponse({ type: CampaignDto })
+  async create(
     @GetUser() user: UserEntity,
     @Body() createCampaignDto: CreateCampaignDto,
-  ) {
-    return this.campaignService.create(user, createCampaignDto);
-  }
-
-  @Post(':id/session')
-  createSession(
-    @GetUser() user: UserEntity,
-    @Param('id', ParseIntPipe) id: number,
-    @Body() createSessionDto: CreateSessionDto,
-  ) {
-    return this.campaignService.createSession(user, id, createSessionDto);
+  ): Promise<CampaignDto> {
+    const campaignEntity = await this.campaignService.create(
+      user,
+      createCampaignDto,
+    );
+    return new CampaignDto(campaignEntity);
   }
 
   @Get()
-  @ApiOkResponse()
-  findAll(@GetUser() user: UserEntity, @Query() paginationDto: PaginationDto) {
-    return this.campaignService.findAll(user, paginationDto);
+  @ApiOperation({ summary: 'Returns all campaigns' })
+  @ApiPaginatedResponse(CampaignDto)
+  async findAll(
+    @GetUser() user: UserEntity,
+    @Query() paginationDto: PaginationRequestDto,
+  ): Promise<PaginatedResponseDto<CampaignDto>> {
+    const [campaignEntities, count] = await this.campaignService.findAll(
+      user,
+      paginationDto,
+    );
+
+    return new PaginatedResponseDto({
+      Dto: CampaignDto,
+      entities: campaignEntities,
+      count,
+    });
   }
 
   @Get(':id')
-  findOne(@GetUser() user: UserEntity, @Param('id', ParseIntPipe) id: number) {
-    return this.campaignService.findOne(user, id);
+  @ApiOperation({ summary: 'Returns campaign by id' })
+  @ApiOkResponse({ type: CampaignDto })
+  async findOne(
+    @GetUser() user: UserEntity,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<CampaignDto> {
+    const campaignEntity = await this.campaignService.findOne(user, id);
+    return new CampaignDto(campaignEntity);
   }
 
   @Patch(':id')
-  update(
+  @ApiOperation({ summary: 'Updates campaign by id' })
+  @ApiOkResponse({ type: CampaignDto })
+  async update(
     @GetUser() user: UserEntity,
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCampaignDto: UpdateCampaignDto,
-  ) {
-    return this.campaignService.update(user, id, updateCampaignDto);
+  ): Promise<CampaignDto> {
+    const campaignEntity = await this.campaignService.update(
+      user,
+      id,
+      updateCampaignDto,
+    );
+    return new CampaignDto(campaignEntity);
   }
 
   @Delete(':id')
-  remove(@GetUser() user: UserEntity, @Param('id', ParseIntPipe) id: number) {
-    return this.campaignService.remove(user, id);
-  }
-
-  @Delete(':id/session/:sessionId')
-  removeSession(
+  @ApiOperation({ summary: 'Removes campaign by id' })
+  @ApiOkResponse({ type: CampaignDto })
+  async remove(
     @GetUser() user: UserEntity,
     @Param('id', ParseIntPipe) id: number,
-    @Param('sessionId', ParseIntPipe) sessionId: number,
-  ) {
-    return this.campaignService.removeSession(user, id, sessionId);
+  ): Promise<CampaignDto> {
+    const campaignEntity = await this.campaignService.remove(user, id);
+    return new CampaignDto(campaignEntity);
   }
 }

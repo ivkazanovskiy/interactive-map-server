@@ -8,17 +8,20 @@ import {
 import { Response } from 'express';
 import { TypeORMError } from 'typeorm';
 import { ErrorDto } from '../../dto/error.dto';
+import { ErrorMessage } from '../../types/error-messages.enum';
 
 @Catch(TypeORMError)
 export class BaseTypeORMFilter implements ExceptionFilter {
   private readonly logger = new Logger(BaseTypeORMFilter.name);
 
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exception: HttpException, host: ArgumentsHost): void {
     const context = host.switchToHttp();
     const response = context.getResponse<Response>();
 
     this.logger.error({ err: exception });
 
-    response.status(500).json(new ErrorDto());
+    response
+      .status(500)
+      .json(new ErrorDto({ code: ErrorMessage.INTERNAL_SERVER_ERROR }));
   }
 }

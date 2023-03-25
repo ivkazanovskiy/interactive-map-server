@@ -5,9 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { CampaignModule } from './campaign/campaign.module';
 import { MapModule } from './map/map.module';
 import { SocketModule } from './socket/socket.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { ProfileModule } from './profile/profile.module';
+import { SessionModule } from './session/session.module';
 
 @Module({
   imports: [
@@ -21,6 +20,7 @@ import { ProfileModule } from './profile/profile.module';
     MapModule,
     SocketModule,
     ProfileModule,
+    SessionModule,
   ],
 })
 export class AppModule {}

@@ -4,7 +4,6 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 import { CampaignEntity } from './campaign.entity';
 import { TimestampEntity } from './timastamp.entity';

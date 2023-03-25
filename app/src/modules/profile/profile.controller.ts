@@ -1,16 +1,11 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { UpdateProfileDto } from './dto/update-profile.dto';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JwtGuard } from '../../guards/jwt-guard';
 import { GetUser } from '../../decorators/get-user.decorator';
 import { UserEntity } from '../../database/entities/user.entity';
@@ -24,8 +19,9 @@ export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
   @Get()
+  @ApiOperation({ summary: `Returns user's profile` })
   @ApiOkResponse({ type: ProfileDto })
-  findOne(@GetUser() user: UserEntity) {
+  findOne(@GetUser() user: UserEntity): ProfileDto {
     return new ProfileDto(user);
   }
 

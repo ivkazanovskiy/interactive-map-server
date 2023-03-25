@@ -13,7 +13,7 @@ export class SocketGateway {
   constructor(private readonly socketService: SocketService) {}
 
   @SubscribeMessage('ping')
-  ping(@MessageBody() data: string, @ConnectedSocket() client: Socket) {
+  ping(@MessageBody() data: string, @ConnectedSocket() client: Socket): void {
     client.emit('pong', 'received: ' + data);
   }
 }

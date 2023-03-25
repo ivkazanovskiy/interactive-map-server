@@ -9,11 +9,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiOkResponse,
+  ApiCreatedResponse,
+} from '@nestjs/swagger';
 import { Request } from 'express';
-import { UserEntity } from '../../database/entities/user.entity';
-import { GetUser } from '../../decorators/get-user.decorator';
-import { JwtGuard } from '../../guards/jwt-guard';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { SignUpDto } from './dto/sign-up.dto';
@@ -26,18 +29,23 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-up')
-  signUp(@Body() signUpDto: SignUpDto) {
+  @ApiOperation({ summary: 'Creates new user and returns auth tokens' })
+  @ApiCreatedResponse({ type: TokensDto })
+  signUp(@Body() signUpDto: SignUpDto): Promise<TokensDto> {
     return this.authService.signUp(signUpDto);
   }
 
   @Post('login')
-  login(@Body() loginDto: LoginDto) {
+  @ApiOperation({ summary: 'Returns auth tokens' })
+  @ApiCreatedResponse({ type: TokensDto })
+  login(@Body() loginDto: LoginDto): Promise<TokensDto> {
     return this.authService.login(loginDto);
   }
 
   // TODO: make sure it is okay to pass refresh token in header
   @Get('sign-out')
   @ApiBearerAuth('refresh_token')
+  @ApiOperation({ summary: 'Removes the refresh token from database' })
   signOut(@Headers() headers: Request['headers']): Promise<void> {
     const { authorization } = headers;
     if (!authorization) throw new UnauthorizedException();
@@ -51,6 +59,8 @@ export class AuthController {
   // TODO: make sure it is okay to pass refresh token in header
   @Get('refresh')
   @ApiBearerAuth('refresh_token')
+  @ApiOperation({ summary: 'Creates new pair of tokens' })
+  @ApiOkResponse({ type: TokensDto })
   refreshToken(@Headers() headers: Request['headers']): Promise<TokensDto> {
     const { authorization } = headers;
     if (!authorization) throw new UnauthorizedException();
@@ -61,24 +71,19 @@ export class AuthController {
     return this.authService.refresh(refreshToken);
   }
 
-  // TODO: remove this endpoint when frontend is ready to use user entity
-  @Get()
-  @ApiOperation({ summary: 'temporary access token check' })
-  @ApiBearerAuth('access_token')
-  @UseGuards(JwtGuard)
-  check(@GetUser() user: UserEntity): void {
-    return;
-  }
-
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  google() {
-    // redirect to google client
-  }
+  @ApiOperation({ summary: 'Redirects to google client' })
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  google(): void {}
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  googleCallback(@Req() req: Request) {
+  @ApiOperation({
+    summary: 'Returns auth tokens using google oAuth credentials',
+  })
+  @ApiOkResponse({ type: TokensDto })
+  googleCallback(@Req() req: Request): Promise<TokensDto> {
     const googleData = req.user as TGoogleUserData;
     return this.authService.authGoogle(googleData);
   }
